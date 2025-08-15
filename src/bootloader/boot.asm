@@ -11,13 +11,13 @@ puts:
     push ax
 
 .loop:
-    lodsb                   ; load byte at DS:SI into AL, increment SI
-    or al, al               ; check if null terminator
+    lodsb                  
+    or al, al               
     jz .done
 
-    mov ah, 0x0E            ; BIOS teletype output function
-    mov bh, 0               ; page number
-    int 0x10                ; call BIOS interrupt to print char
+    mov ah, 0x0E            
+    mov bh, 0          
+    int 0x10                
 
     jmp .loop
 
