@@ -7,7 +7,7 @@ mesg_hello db 'Hello, World!',0
 main:
     mov ax,0
     mov ds,ax
-    mov es,ax
+    ; mov es,ax
 
     mov ss,ax
     mov sp,0x7c00
