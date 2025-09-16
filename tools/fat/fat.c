@@ -1,13 +1,8 @@
-#include<stdio.h>
-#include<stdint.h>
-#include<stdbool.h>
-#include<string.h>
-#include<stdlib.h>
-#include<unistd.h>
-#include<fcntl.h>
-#include<sys/stat.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 #include <ctype.h>
-#include <stdbool.h>
 
 typedef uint8_t bool;
 #define true 1

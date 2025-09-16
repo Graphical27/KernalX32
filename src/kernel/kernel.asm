@@ -1,40 +1,45 @@
-; BIOS = Basic Input Output System
-org 0x7c00
+org 0x0
 bits 16
 
-mesg_hello db 'Hello, World!',0
-;db = define byte
-main:
-    mov ax,0
-    mov ds,ax
-    ; mov es,ax
 
-    mov ss,ax
-    mov sp,0x7c00
-    mov si,mesg_hello
+%define ENDL 0x0D, 0x0A
+
+
+start:
+    ; print hello world message
+    mov si, msg_hello
     call puts
-    hlt
-
-puts:
-    push si
-    push ax
-.loop:
-    lodsb
-    cmp al,0
-    je .done
-    mov ah,0x0e
-    mov bh,0
-    int 0x10
-    jmp .loop
-
-
-.done:
-    pop si
-    pop ax        ;THe repition was happening case i poped ax before si
-    ret
 
 .halt:
-    jmp .halt
-times 510-($-$$) db 0
-dw 0xaa55
-;dw = define word
+    cli
+    hlt
+
+;
+; Prints a string to the screen
+; Params:
+;   - ds:si points to string
+;
+puts:
+    ; save registers we will modify
+    push si
+    push ax
+    push bx
+
+.loop:
+    lodsb               ; loads next character in al
+    or al, al           ; verify if next character is null?
+    jz .done
+
+    mov ah, 0x0E        ; call bios interrupt
+    mov bh, 0           ; set page number to 0
+    int 0x10
+
+    jmp .loop
+
+.done:
+    pop bx
+    pop ax
+    pop si    
+    ret
+
+msg_hello: db 'Hello world from KERNEL!', ENDL, 0
