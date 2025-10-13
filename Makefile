@@ -1,8 +1,8 @@
 ASM=nasm
 CC=gcc
 
-CC16=/home/graphical/openwatcom/binl/wcc
-LD16=/home/graphical/openwatcom/binl/wlink
+CC16=/snap/open-watcom/current/binl/wcc
+LD16=/snap/open-watcom/current/binl/wlink
 
 SRC_DIR=src
 TOOLS_DIR=tools
