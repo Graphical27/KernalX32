@@ -1,11 +1,13 @@
 #include "stdio.h"
 #include "x86.h"
 
-void putc(char c){
+void putc(char c)
+{
     x86_Video_WriteCharTeletype(c, 0);
 }
 
-void puts(const char* str){
+void puts(const char* str)
+{
     while(*str)
     {
         putc(*str);
@@ -13,7 +15,8 @@ void puts(const char* str){
     }
 }
 
-void puts_f(const char far* str){
+void puts_f(const char far* str)
+{
     while(*str)
     {
         putc(*str);
@@ -35,17 +38,23 @@ void puts_f(const char far* str){
 
 int* printf_number(int* argp, int length, bool sign, int radix);
 
-void _cdecl printf(const char* fmt, ...){
+void _cdecl printf(const char* fmt, ...)
+{
     int* argp = (int*)&fmt;
     int state = PRINTF_STATE_NORMAL;
     int length = PRINTF_LENGTH_DEFAULT;
     int radix = 10;
     bool sign = false;
+
     argp++;
-    while (*fmt){
-        switch (state){
+
+    while (*fmt)
+    {
+        switch (state)
+        {
             case PRINTF_STATE_NORMAL:
-                switch (*fmt){
+                switch (*fmt)
+                {
                     case '%':   state = PRINTF_STATE_LENGTH;
                                 break;
                     default:    putc(*fmt);
@@ -54,7 +63,8 @@ void _cdecl printf(const char* fmt, ...){
                 break;
 
             case PRINTF_STATE_LENGTH:
-                switch (*fmt){
+                switch (*fmt)
+                {
                     case 'h':   length = PRINTF_LENGTH_SHORT;
                                 state = PRINTF_STATE_LENGTH_SHORT;
                                 break;
@@ -66,7 +76,8 @@ void _cdecl printf(const char* fmt, ...){
                 break;
 
             case PRINTF_STATE_LENGTH_SHORT:
-                if (*fmt == 'h'){
+                if (*fmt == 'h')
+                {
                     length = PRINTF_LENGTH_SHORT_SHORT;
                     state = PRINTF_STATE_SPEC;
                 }
@@ -74,7 +85,8 @@ void _cdecl printf(const char* fmt, ...){
                 break;
 
             case PRINTF_STATE_LENGTH_LONG:
-                if (*fmt == 'l'){
+                if (*fmt == 'l')
+                {
                     length = PRINTF_LENGTH_LONG_LONG;
                     state = PRINTF_STATE_SPEC;
                 }
@@ -83,7 +95,8 @@ void _cdecl printf(const char* fmt, ...){
 
             case PRINTF_STATE_SPEC:
             PRINTF_STATE_SPEC_:
-                switch (*fmt){
+                switch (*fmt)
+                {
                     case 'c':   putc((char)*argp);
                                 argp++;
                                 break;
@@ -140,54 +153,67 @@ void _cdecl printf(const char* fmt, ...){
 
 const char g_HexChars[] = "0123456789abcdef";
 
-int* printf_number(int* argp, int length, bool sign, int radix){
+int* printf_number(int* argp, int length, bool sign, int radix)
+{
     char buffer[32];
     unsigned long long number;
     int number_sign = 1;
     int pos = 0;
-    switch (length){
+
+    // process length
+    switch (length)
+    {
         case PRINTF_LENGTH_SHORT_SHORT:
         case PRINTF_LENGTH_SHORT:
         case PRINTF_LENGTH_DEFAULT:
-            if (sign){
+            if (sign)
+            {
                 int n = *argp;
-                if (n < 0){
+                if (n < 0)
+                {
                     n = -n;
                     number_sign = -1;
                 }
                 number = (unsigned long long)n;
             }
-            else{
+            else
+            {
                 number = *(unsigned int*)argp;
             }
             argp++;
             break;
 
         case PRINTF_LENGTH_LONG:
-            if (sign){
+            if (sign)
+            {
                 long int n = *(long int*)argp;
-                if (n < 0){
+                if (n < 0)
+                {
                     n = -n;
                     number_sign = -1;
                 }
                 number = (unsigned long long)n;
             }
-            else{
+            else
+            {
                 number = *(unsigned long int*)argp;
             }
             argp += 2;
             break;
 
         case PRINTF_LENGTH_LONG_LONG:
-            if (sign){
+            if (sign)
+            {
                 long long int n = *(long long int*)argp;
-                if (n < 0){
+                if (n < 0)
+                {
                     n = -n;
                     number_sign = -1;
                 }
                 number = (unsigned long long)n;
             }
-            else{
+            else
+            {
                 number = *(unsigned long long int*)argp;
             }
             argp += 4;
@@ -211,4 +237,17 @@ int* printf_number(int* argp, int length, bool sign, int radix){
         putc(buffer[pos]);
 
     return argp;
+}
+
+void print_buffer(const char* msg, const void far* buffer, uint16_t count)
+{
+    const uint8_t far* u8Buffer = (const uint8_t far*)buffer;
+    
+    puts(msg);
+    for (uint16_t i = 0; i < count; i++)
+    {
+        putc(g_HexChars[u8Buffer[i] >> 4]);
+        putc(g_HexChars[u8Buffer[i] & 0xF]);
+    }
+    puts("\r\n");
 }

@@ -2,7 +2,7 @@ BUILD_DIR?=build/
 ASM?=nasm
 ASMFLAGS?=-f obj
 CC16?=/snap/open-watcom/current/binl/wcc
-CFLAGS16?=-4 -d3 -s -wx -ms -zl -zq # -oneatxzh 
+CFLAGS16?=-4 -d3 -s -wx -ms -zl -zq -za99 # -oneatxzh 
 LD16?=/snap/open-watcom/current/binl/wlink
 
 SOURCES_C=$(wildcard *.c)

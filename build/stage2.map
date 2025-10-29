@@ -1,7 +1,7 @@
 Open Watcom Linker Version 2.0 beta Mar 22 2020 00:24:07 (32-bit)
 Copyright (c) 2002-2020 The Open Watcom Contributors. All Rights Reserved.
 Portions Copyright (c) 1985-2002 Sybase, Inc. All Rights Reserved.
-Created on:       25/10/15 04:37:45
+Created on:       25/10/29 21:14:06
 Executable Image: /mnt/c/Games/!Projects/KernalX32/build/stage2.bin
 creating a RAW Binary Image executable
 
@@ -13,7 +13,7 @@ creating a RAW Binary Image executable
 Group                           Address              Size
 =====                           =======              ====
 
-DGROUP                          00000670             0000009e
+DGROUP                          00001a80             00000168
 
 
 
@@ -25,10 +25,11 @@ Segment                Class          Group          Address         Size
 =======                =====          =====          =======         ====
 
 _ENTRY                 CODE           AUTO           00000000        00000013
-_TEXT                  CODE           AUTO           00000013        0000065d
-CONST                  DATA           DGROUP         00000670        0000008c
-CONST2                 DATA           DGROUP         000006fc        00000011
-_DATA                  DATA           DGROUP         0000070e        00000000
+_TEXT                  CODE           AUTO           00000013        00001a6d
+CONST                  DATA           DGROUP         00001a80        00000145
+CONST2                 DATA           DGROUP         00001bc6        00000011
+_DATA                  DATA           DGROUP         00001bd8        00000008
+_BSS                   BSS            DGROUP         00001be0        00000008
 
 
                         +----------------+
@@ -44,17 +45,53 @@ Address        Symbol
 Module: /mnt/c/Games/!Projects/KernalX32/build/stage2/asm/kernel.obj(kernel.asm)
 00000000       entry
 Module: /mnt/c/Games/!Projects/KernalX32/build/stage2/asm/x86.obj(x86.asm)
-00000013       _x86_div64_32
-00000041       _x86_Video_WriteCharTeletype
+00000013       __U4D
+0000003a       __U4M
+00000054       _x86_div64_32
+00000082       _x86_Video_WriteCharTeletype
+00000095       _x86_Disk_Reset
+000000aa       _x86_Disk_Read
+000000e1       _x86_Disk_GetDriveParams
+Module: /mnt/c/Games/!Projects/KernalX32/build/stage2/c/ctype.obj(/mnt/c/Games/!Projects/KernalX32/src/bootloader/stage2/ctype.c)
+00000125+      islower_
+00000163       toupper_
+Module: /mnt/c/Games/!Projects/KernalX32/build/stage2/c/disk.obj(/mnt/c/Games/!Projects/KernalX32/src/bootloader/stage2/disk.c)
+000001ab       DISK_Initialize_
+00000221+      DISK_LBA2CHS_
+000002d4       DISK_ReadSectors_
+Module: /mnt/c/Games/!Projects/KernalX32/build/stage2/c/fat.obj(/mnt/c/Games/!Projects/KernalX32/src/bootloader/stage2/fat.c)
+00000371+      FAT_ReadBootSector_
+000003a5+      FAT_ReadFat_
+000003e9       FAT_Initialize_
+00000634+      FAT_ClusterToLba_
+0000068a+      FAT_OpenEntry_
+00000854+      FAT_NextCluster_
+000008dd       FAT_Read_
+00000c41       FAT_ReadEntry_
+00000c9a       FAT_Close_
+00000d18+      FAT_FindFile_
+00000e52       FAT_Open_
 Module: /mnt/c/Games/!Projects/KernalX32/build/stage2/c/main.obj(/mnt/c/Games/!Projects/KernalX32/src/bootloader/stage2/main.c)
-00000054       _cstart_
+00000fcc       _cstart_
+00001bdc+      _g_data
+Module: /mnt/c/Games/!Projects/KernalX32/build/stage2/c/memory.obj(/mnt/c/Games/!Projects/KernalX32/src/bootloader/stage2/memory.c)
+0000117b       memcpy_
+000011f3       memset_
+00001252       memcmp_
 Module: /mnt/c/Games/!Projects/KernalX32/build/stage2/c/stdio.obj(/mnt/c/Games/!Projects/KernalX32/src/bootloader/stage2/stdio.c)
-000000de+      putc_
-00000105       puts_
-0000013c+      puts_f_
-00000179       _printf
-000003fc+      printf_number_
-000006fc+      _g_HexChars
+000012cf       putc_
+000012f6+      puts_
+0000132d+      puts_f_
+0000136a       _printf
+000015ed+      printf_number_
+00001861+      print_buffer_
+00001bc6+      _g_HexChars
+Module: /mnt/c/Games/!Projects/KernalX32/build/stage2/c/string.obj(/mnt/c/Games/!Projects/KernalX32/src/bootloader/stage2/string.c)
+000018dd       strchr_
+00001938+      strcpy_
+000019ac       strlen_
+Module: /mnt/c/Games/!Projects/KernalX32/build/stage2/c/utility.obj(/mnt/c/Games/!Projects/KernalX32/src/bootloader/stage2/utility.c)
+000019e7+      align_
 
 
                         +---------------------+
@@ -68,17 +105,48 @@ Module          Segment               Class           Address         Size
 ======          =======               =====           =======         ====
 
 kernel.asm      _ENTRY                CODE           00000000         00000013
-x86.asm         _TEXT                 CODE           00000013         00000041
+x86.asm         _TEXT                 CODE           00000013         00000112
+/mnt/c/Games/!Projects/KernalX32/src/bootloader/stage2/ctype.c
+                _TEXT                 CODE           00000125         00000086
+                CONST                 DATA           00001a80         00000000
+                CONST2                DATA           00001bc6         00000000
+                _DATA                 DATA           00001bd8         00000000
+/mnt/c/Games/!Projects/KernalX32/src/bootloader/stage2/disk.c
+                _TEXT                 CODE           000001ab         000001c6
+                CONST                 DATA           00001a80         00000000
+                CONST2                DATA           00001bc6         00000000
+                _DATA                 DATA           00001bd8         00000000
+/mnt/c/Games/!Projects/KernalX32/src/bootloader/stage2/fat.c
+                _TEXT                 CODE           00000371         00000c5b
+                CONST                 DATA           00001a80         00000107
+                CONST2                DATA           00001bc6         00000000
+                _DATA                 DATA           00001bd8         00000004
+                _BSS                  BSS            00001be0         00000008
 /mnt/c/Games/!Projects/KernalX32/src/bootloader/stage2/main.c
-                _TEXT                 CODE           00000054         0000008a
-                CONST                 DATA           00000670         0000008c
-                CONST2                DATA           000006fc         00000000
-                _DATA                 DATA           0000070e         00000000
+                _TEXT                 CODE           00000fcc         000001af
+                CONST                 DATA           00001b88         0000003a
+                CONST2                DATA           00001bc6         00000000
+                _DATA                 DATA           00001bdc         00000004
+/mnt/c/Games/!Projects/KernalX32/src/bootloader/stage2/memory.c
+                _TEXT                 CODE           0000117b         00000154
+                CONST                 DATA           00001bc2         00000000
+                CONST2                DATA           00001bc6         00000000
+                _DATA                 DATA           00001be0         00000000
 /mnt/c/Games/!Projects/KernalX32/src/bootloader/stage2/stdio.c
-                _TEXT                 CODE           000000de         00000592
-                CONST                 DATA           000006fc         00000000
-                CONST2                DATA           000006fc         00000011
-                _DATA                 DATA           0000070e         00000000
+                _TEXT                 CODE           000012cf         0000060e
+                CONST                 DATA           00001bc2         00000003
+                CONST2                DATA           00001bc6         00000011
+                _DATA                 DATA           00001be0         00000000
+/mnt/c/Games/!Projects/KernalX32/src/bootloader/stage2/string.c
+                _TEXT                 CODE           000018dd         0000010a
+                CONST                 DATA           00001bc6         00000000
+                CONST2                DATA           00001bd8         00000000
+                _DATA                 DATA           00001be0         00000000
+/mnt/c/Games/!Projects/KernalX32/src/bootloader/stage2/utility.c
+                _TEXT                 CODE           000019e7         00000099
+                CONST                 DATA           00001bc6         00000000
+                CONST2                DATA           00001bd8         00000000
+                _DATA                 DATA           00001be0         00000000
 Warning! W1014: stack segment not found
 
 
@@ -87,6 +155,6 @@ Warning! W1014: stack segment not found
                         +-----------------------+
 
 Stack size:  0200 (512.)
-Memory size:  070e (1806.)
+Memory size:  1be8 (7144.)
 Entry point address: 00000000
 Link time: 00:00.00
