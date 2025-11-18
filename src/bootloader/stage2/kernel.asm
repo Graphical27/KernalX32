@@ -1,20 +1,4 @@
+; kernel.asm removed from stage2 build: file previously defined 'entry' and called _cstart_
+; This file conflicted with `entry.asm` in the same directory and caused multiple-definition linker errors.
+; Keeping an empty stub so builds that expect this file name won't fail.
 bits 16
-
-section _ENTRY class=CODE
-
-extern _cstart_
-global entry
-
-entry:
-    cli
-    ; setup stack
-    mov ax, ds
-    mov ss, ax
-    mov sp, 0
-    mov bp, sp
-    sti
-    xor dh, dh
-    push dx
-    call _cstart_
-    cli
-    hlt

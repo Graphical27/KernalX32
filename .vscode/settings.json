@@ -1,6 +1,6 @@
 {
     "files.associations": {
-        "stat.h": "c"
-    },
-    "makefile.configureOnOpen": false
+        "x86.h": "c",
+        "stdio.h": "c"
+    }
 }
