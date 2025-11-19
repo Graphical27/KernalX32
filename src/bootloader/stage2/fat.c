@@ -37,8 +37,6 @@ typedef struct
     uint8_t VolumeLabel[11];    // 11 bytes, padded with spaces
     uint8_t SystemId[8];
 
-    // ... we don't care about code ...
-
 } __attribute__((packed)) FAT_BootSector;
 
 
